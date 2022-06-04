@@ -1,11 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <errno.h>
-#include <error.h>
 #include <unistd.h>
-#include <sys/types.h>
-#include <sys/wait.h>
 #include <signal.h>
 #include "minish.h"
 
@@ -21,7 +16,7 @@ sigint_handler(int signum) {                    // the handler for SIGINT
 }
 
 struct builtin_struct builtin_arr[] = {
-        {"exit", builtin_exit, HELP_EXIT },
+        {"exit", builtin_exit, HELP_EXIT},
         {"help", builtin_help, HELP_HELP},
         {"history", builtin_history, HELP_HISTORY},
         {"status", builtin_status, HELP_STATUS},
@@ -31,9 +26,9 @@ struct builtin_struct builtin_arr[] = {
         {"gid", builtin_gid, HELP_GID},
         {"setenv", builtin_setenv, HELP_SETENV},
         {"pid", builtin_pid, HELP_PID},
-        {"uid", builtin_uid, HELP_UID },
+        {"uid", builtin_uid, HELP_UID},
         {"unsetenv", builtin_unsetenv, HELP_UNSETENV},
-        { NULL, NULL, NULL }
+        NULL
     };
 
 int globalstatret = 0; // = valor por defecto
@@ -58,7 +53,7 @@ main () {
     for (;;) {
         prompt(dirname);
         if (fgets(line, MAXLINE, stdin) == NULL) {  // EOF
-           
+            
             if (feof(stdin)) {
                 break;      // normal EOF, break loop
             } else {

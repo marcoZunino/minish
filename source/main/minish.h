@@ -70,8 +70,9 @@ extern struct builtin_struct builtin_arr[];
 // Funciones a definir en los correspondientes archivos fuentes
 
 extern struct builtin_struct * builtin_lookup(char *cmd);
+
 extern int builtin_exit (int argc, char ** argv);
-extern int builtin_help (char * argv1);
+extern int builtin_help (int argc, char ** argv);
 extern int builtin_history (int argc, char ** argv);
 extern int builtin_status (int argc, char ** argv);
 extern int builtin_cd (int argc, char ** argv);
