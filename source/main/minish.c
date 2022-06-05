@@ -72,6 +72,5 @@ main () {
     }
 
     fputc('\n', stderr);
-    fprintf(stderr, "Exiting %s ...\n", dirname);
     exit(EXIT_SUCCESS);
 }

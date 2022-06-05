@@ -3,18 +3,16 @@
 #include <string.h>
 #include "minish.h"
 
-int  builtin_help (int argc, char ** argv){
+int builtin_help (int argc, char ** argv) {
     int status = 0;
-    
-    struct builtin_struct b;
-    if (argv[1] == NULL) argv[1] = "help";
-    for (int i=0; (b = builtin_arr[i]).cmd != NULL; i++) {
-        if (strcmp(argv[1], b.cmd) == 0) {
-            printf("%s\n", b.help_txt);
-            break;
-        }
+
+    if (argv[1] == NULL) printf("%s\n", HELP_HELP);
+    else {
+
+        struct builtin_struct * b = builtin_lookup(argv[1]);
+        if (b != NULL) printf("%s\n", b->help_txt);
+        else printf("No se encontró comando %s\n", argv[1]);
     }
-    if (b.cmd == NULL) printf("help externo\n");
 
     return status;
 }
