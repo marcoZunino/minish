@@ -10,8 +10,11 @@ int ejecutar(int argc, char **argv){
     // fprintf(stderr, "Will execute command %s\n", argv[0]);
 
     struct builtin_struct * b = builtin_lookup(argv[0]);
-    if (b != NULL) status = b->func(argc, argv);
-    else status = externo(argc, argv);
+    if (b != NULL) {
+        status = b->func(argc, argv);
+    } else {
+        status = externo(argc, argv);
+    }
 
     return status;
 }

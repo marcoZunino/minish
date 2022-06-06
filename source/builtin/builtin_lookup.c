@@ -6,11 +6,10 @@
 struct builtin_struct * builtin_lookup (char * cmd) {
 
     struct builtin_struct * b;
-    for (int i=0; (b = &builtin_arr[i])->cmd != NULL; i++) {
-        if (strcmp(cmd, b->cmd) == 0) break;
+    for (b = builtin_arr; b->cmd != NULL; b++) {
+        if (strcmp(cmd, b->cmd) == 0) return b;
     }
-    if (b->cmd == NULL) return NULL;
 
-    return b;
+    return NULL;
 
 }

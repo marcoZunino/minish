@@ -28,7 +28,7 @@ struct builtin_struct builtin_arr[] = {
         {"pid", builtin_pid, HELP_PID},
         {"uid", builtin_uid, HELP_UID},
         {"unsetenv", builtin_unsetenv, HELP_UNSETENV},
-        NULL
+        {NULL, NULL, NULL}
     };
 
 int globalstatret = 0; // = valor por defecto
