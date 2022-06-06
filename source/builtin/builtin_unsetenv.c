@@ -10,7 +10,10 @@ int builtin_unsetenv (int argc, char ** argv) {
                 status = unsetenv(argv[i]);
                 printf("%s unset \n", argv[i]);
             }
-            else printf("unsetenv %s error\n", argv[i]);
+            else {
+                printf("unsetenv %s error\n", argv[i]);
+                status = 1;
+            }
         }
     return status;
 }

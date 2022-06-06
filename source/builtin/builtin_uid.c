@@ -6,11 +6,17 @@
 
 int builtin_uid (int argc, char ** argv) {
 
-    uid_t userid = getuid();
+    int status = 0;
+    uid_t userid = getuid();                 // es siempre exitosa
     struct passwd * p = getpwuid(userid);
+
+    if (p == 0){
+        printf("Ha ocurrido un error\n");
+        status = 1;
+    }
 
     printf("User ID: %i\n", userid);
     printf("User name: %s\n", p->pw_name);
 
-    return 0;
+    return status;
 }

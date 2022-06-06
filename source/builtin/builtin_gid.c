@@ -10,7 +10,11 @@ int builtin_gid (int argc, char ** argv) {
     gid_t groupid = getgid();
     gid_t groups[MAXWORDS] = { 0 };
     
-    status = getgroups(MAXWORDS, groups);
+    int obtener_grupos = getgroups(MAXWORDS, groups);
+    if (obtener_grupos == -1) {
+        printf("Ha ocurrido un error\n");
+        status = 1;
+    }
     printf("Group ID: %i\n", groupid);
     printf("Secondary groups IDs:\n");
     for (int i = 0; groups[i]!=0; i++) {

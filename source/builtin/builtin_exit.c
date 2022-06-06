@@ -4,11 +4,15 @@
 
 int builtin_exit (int argc, char ** argv){
 
-    int arg;
-    if (argv[1] == NULL) arg = globalstatret;
-    else arg = atoi(argv[1]);
+    int status;
     
-    exit(arg);
+    if (argv[1] == NULL){
+        status = globalstatret;
+    } else {
+        status = atoi(argv[1]);
+    }
+    
+    exit(status);
 
-    return arg;
+    return status;
 }

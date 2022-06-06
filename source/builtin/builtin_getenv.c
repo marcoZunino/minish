@@ -4,14 +4,19 @@
 
 int builtin_getenv (int argc, char ** argv) {
     //environ
-    if (argv[1] == NULL) printf("lista\n"); //imprimir toda la lista;
+    int status = 0;
+    if (argv[1] == NULL) printf("lista\n"); //imprimir toda la lista; creo que no hay que hacerlo
     else {
         for (int i = 1; i < argc; i++) {
             char * value = getenv(argv[i]);
-            if (value != NULL) printf("%s = %s\n", argv[i], getenv(argv[i]));
-            else printf("getenv %s error\n", argv[i]);
+            if (value != NULL) {
+                printf("%s = %s\n", argv[i], getenv(argv[i]));
+            } else {
+                printf("getenv %s error\n", argv[i]);
+                status = 1;
+            }
         }
     }
 
-    return 0;
+    return status;
 }
