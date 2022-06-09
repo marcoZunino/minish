@@ -12,7 +12,7 @@ int builtin_uid (int argc, char ** argv) {
 
     if (p == 0){
         printf("Ha ocurrido un error\n");
-        status = 1;
+        status = -1;
     }
 
     printf("User ID: %i\n", userid);

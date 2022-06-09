@@ -12,10 +12,10 @@ int builtin_getenv (int argc, char ** argv) {
                 printf("%s = %s\n", argv[i], getenv(argv[i]));
             } else {
                 printf("getenv %s error\n", argv[i]);
-                status = 1;
+                status = -1;
             }
         }
-    } else status = 1;
+    } else status = -1;
 
     return status;
 }

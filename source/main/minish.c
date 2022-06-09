@@ -11,7 +11,7 @@ prompt(char *ps) {
 }
 
 void
-sigint_handler(int signum) {                    // the handler for SIGINT
+sigint_handler(int signum) {             // the handler for SIGINT
     fprintf(stderr, "Interrupt! (signal number %d)\n", signum);
 }
 
@@ -35,23 +35,22 @@ int globalstatret = 0; // = valor por defecto
 
 int
 main () {
-//main(int argc, char *argv[]) {
-    // Escribir prompt string en standard error??
-    
+
     char line[MAXLINE];
-    // char *progname = argv[0];
+
     char *dirname = NULL;
-    dirname = getcwd(dirname, MAXLINE);
     
     struct sigaction oldact, newact;
 
-    sigaction(SIGINT, NULL, &newact);           // the  previous action for SIGINT is saved in oldact
+    sigaction(SIGINT, NULL, &newact);         // the  previous action for SIGINT is saved in oldact
     newact.sa_handler = sigint_handler;
     sigaction(SIGINT, &newact, NULL);           // set SIGINT handler for loop
 
 
     for (;;) {
-        prompt(dirname);
+
+        prompt(getcwd(dirname, MAXLINE));   //prompt, current directory
+
         if (fgets(line, MAXLINE, stdin) == NULL) {  // EOF
             
             if (feof(stdin)) {
@@ -66,8 +65,6 @@ main () {
         int argc = linea2argv(line, MAXWORDS - 1, argv);
 
         globalstatret = ejecutar(argc, argv);
-
-        // actualizar status de retorno
 
     }
 
