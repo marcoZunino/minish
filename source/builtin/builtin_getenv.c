@@ -5,8 +5,7 @@
 int builtin_getenv (int argc, char ** argv) {
     //environ
     int status = 0;
-    if (argv[1] == NULL) printf("lista\n"); //imprimir toda la lista; creo que no hay que hacerlo
-    else {
+    if (argv[1] != NULL) {
         for (int i = 1; i < argc; i++) {
             char * value = getenv(argv[i]);
             if (value != NULL) {
@@ -16,7 +15,7 @@ int builtin_getenv (int argc, char ** argv) {
                 status = 1;
             }
         }
-    }
+    } else status = 1;
 
     return status;
 }

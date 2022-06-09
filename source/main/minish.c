@@ -72,5 +72,5 @@ main () {
     }
 
     fputc('\n', stderr);
-    exit(EXIT_SUCCESS);
+    exit(EXIT_SUCCESS); //exit(globalstatret)
 }
