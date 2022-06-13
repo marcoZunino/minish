@@ -6,7 +6,7 @@
 int builtin_help (int argc, char ** argv) {
     int status = 0;
 
-    if (argv[1] == NULL){
+    if (argc == 1) {
         printf("%s\n", HELP_HELP);
     } else {
         struct builtin_struct * b = builtin_lookup(argv[1]);
@@ -14,7 +14,7 @@ int builtin_help (int argc, char ** argv) {
             printf("%s\n", b->help_txt);
         } else {
             printf("No se encontró comando %s\n", argv[1]);
-            status = 1;
+            status = -1;
         }
     }
 
