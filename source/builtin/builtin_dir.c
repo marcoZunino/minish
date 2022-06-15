@@ -42,13 +42,23 @@ int builtin_dir (int argc, char ** argv) {
         DIR * d = opendir(argv[1]);
 
         if (d == NULL) {
-
+            struct dirent * c;
+            DIR * d = opendir(".");
+            while ((c = readdir(d)) != NULL) {
+                if (strcmp(c->d_name, argv[1]) == 0) {
+                    printf("%s\n", c->d_name);
+                }
+            }
         } else {
             while ((dir = readdir(d)) != NULL) {
                 printf("%s\n", dir->d_name);
             }
             closedir(d);
         }
+
+        
+
+        
         
 
         // } else {

@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <signal.h>
+#include <string.h>
 #include "minish.h"
 
 void
@@ -52,7 +53,7 @@ main () {
         prompt(getcwd(dirname, MAXLINE));   //prompt, current directory
 
         if (fgets(line, MAXLINE, stdin) == NULL) {  // EOF
-            
+
             if (feof(stdin)) {
                 break;      // normal EOF, break loop
             } else {
@@ -63,6 +64,9 @@ main () {
         char *argv[MAXWORDS] = {NULL};
 
         int argc = linea2argv(line, MAXWORDS - 1, argv);
+        if (argc == 0) {
+            continue;
+        }
 
         globalstatret = ejecutar(argc, argv);
 
