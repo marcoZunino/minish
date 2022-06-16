@@ -5,7 +5,7 @@
 #include <signal.h>
 #include "minish.h"
 
-int ejecutar(int argc, char **argv){
+int ejecutar(int argc, char **argv) {
     int status = 0; // = valor por defecto
     // fprintf(stderr, "Will execute command %s\n", argv[0]);
 

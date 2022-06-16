@@ -16,6 +16,20 @@ sigint_handler(int signum) {             // the handler for SIGINT
     fprintf(stderr, "Interrupt! (signal number %d)\n", signum);
 }
 
+void
+update_history(char * line) {
+    char path[MAXLINE];
+    strncpy(path, getenv("HOME"), MAXLINE);
+    strcat(path, "/");
+    strcat(path, HISTORY_FILE);
+    
+    FILE * history = fopen(path, "a+");
+    fputs(line, history);
+
+    fclose(history);
+
+}
+
 struct builtin_struct builtin_arr[] = {
         {"exit", builtin_exit, HELP_EXIT},
         {"help", builtin_help, HELP_HELP},
@@ -61,17 +75,20 @@ main () {
             }
         }
 
-        char *argv[MAXWORDS] = {NULL};
+        
 
+        char *argv[MAXWORDS] = {NULL};
         int argc = linea2argv(line, MAXWORDS - 1, argv);
         if (argc == 0) {
             continue;
         }
+
+        update_history(line);
 
         globalstatret = ejecutar(argc, argv);
 
     }
 
     fputc('\n', stderr);
-    exit(EXIT_SUCCESS); //exit(globalstatret)
+    exit(globalstatret);
 }
