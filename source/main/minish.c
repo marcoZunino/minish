@@ -43,10 +43,12 @@ write_history_file() {
     strcat(path, "/");
     strcat(path, HISTORY_FILE);
     
-    FILE * history = fopen(path, "a");
-    for (struct history_entry * entry = history_arr->first; entry != NULL; entry = entry->next) {
+    FILE *history = fopen(path, "a");
+    struct history_entry *entry = history_arr->first;
+    for (struct history_entry *next; entry != NULL; entry = next) {
+        next = entry->next;
         fputs(entry->command, history);
-        //free(entry);
+        free(entry);
     }
     fclose(history);
 }

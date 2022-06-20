@@ -4,16 +4,16 @@
 
 int builtin_exit (int argc, char ** argv){
 
-    int status;
+    int status;                         // admite un parámetro que es el status de retorno
     
-    if (argv[1] == NULL){
-        status = globalstatret;
+    if (argc == 1){                     // si hay un argumento solo 
+        status = globalstatret;         // status es el del ultimo comando     
     } else {
-        status = atoi(argv[1]);
+        status = atoi(argv[1]);         // sino preguntar
     }
     
-    write_history_file();
-    exit(status);
+    write_history_file();               // actualiza history
+    exit(status);                       // termina el shell
 
     return status;
 }
