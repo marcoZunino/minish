@@ -31,17 +31,3 @@ int linea2argv(char* linea, int argc, char** argv) {
     return count;
 
 }
-
-/*
-int linea2argv (char *linea, int argc, char **argv){
-    argv[0] = strtok(linea, " \t");
-    if (argv[0] == NULL){
-        return 0;
-    }
-    int i;
-    for (i = 1; i<=argc && argv[i]!=NULL; i++){
-        argv[i] = strtok(NULL, " \t");
-    }
-    return i;
-}
-*/

@@ -13,6 +13,9 @@ int builtin_cd (int argc, char ** argv) {
         char * home = getenv("HOME");
         if (home != NULL) {
             status = chdir(home);
+        } else {
+            printf("error\n");
+            return -1;
         }
     } else if (strcmp(argv[1], "-") == 0){
         status = chdir("..");

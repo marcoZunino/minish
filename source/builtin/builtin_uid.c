@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <pwd.h>
 #include <sys/types.h>
+#include <unistd.h>
 #include "minish.h"
 
 int builtin_uid (int argc, char ** argv) {

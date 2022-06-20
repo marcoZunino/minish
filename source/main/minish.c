@@ -3,6 +3,8 @@
 #include <unistd.h>
 #include <signal.h>
 #include <string.h>
+#include <error.h>
+#include <errno.h>
 #include "minish.h"
 
 void
@@ -17,17 +19,36 @@ sigint_handler(int signum) {             // the handler for SIGINT
 }
 
 void
-update_history(char * line) {
+add_history_entry(char *cmd) {
+    if (cmd != NULL) {
+        struct history_entry * new = (struct history_entry *) malloc(sizeof(struct history_entry));
+        new->command = strdup(cmd);
+        new->next = NULL;
+
+        struct history_entry * end = history_arr->first;
+        if (end != NULL) {
+            for (; end->next!=NULL; end = end->next);
+            end->next = new;
+        } else {
+            history_arr->first = new;
+        }
+        history_arr->qty ++;
+    }
+}
+
+void
+write_history_file() {
     char path[MAXLINE];
     strncpy(path, getenv("HOME"), MAXLINE);
     strcat(path, "/");
     strcat(path, HISTORY_FILE);
     
-    FILE * history = fopen(path, "a+");
-    fputs(line, history);
-
+    FILE * history = fopen(path, "a");
+    for (struct history_entry * entry = history_arr->first; entry != NULL; entry = entry->next) {
+        fputs(entry->command, history);
+        //free(entry);
+    }
     fclose(history);
-
 }
 
 struct builtin_struct builtin_arr[] = {
@@ -44,12 +65,27 @@ struct builtin_struct builtin_arr[] = {
         {"uid", builtin_uid, HELP_UID},
         {"unsetenv", builtin_unsetenv, HELP_UNSETENV},
         {NULL, NULL, NULL}
-    };
+};
+
+
+//struct history_list *history_arr = (struct history_list *) malloc(sizeof(struct history_list));
+struct history_list history_array = {NULL, 0};
+struct history_list *history_arr = &history_array;
+// history_arr->first = NULL;
+// history_arr->qty = 0;
+
 
 int globalstatret = 0; // = valor por defecto
 
 int
 main () {
+
+    if (getenv("HOME") == NULL) {
+        // ./minish: variable de ambiente HOME no existe - se usará history en /usr/local/bin
+        // ./minish: no se puede openat archivo history: .minish_history: Permission denied
+        error(0, errno, "./minish: variable de ambiente HOME no existe - se usará history en /usr/local/bin\n");
+        exit(-1);
+    }
 
     char line[MAXLINE];
 
@@ -75,20 +111,19 @@ main () {
             }
         }
 
-        
-
         char *argv[MAXWORDS] = {NULL};
         int argc = linea2argv(line, MAXWORDS - 1, argv);
         if (argc == 0) {
             continue;
         }
 
-        update_history(line);
+        add_history_entry(line);
 
         globalstatret = ejecutar(argc, argv);
 
     }
 
+    write_history_file();
     fputc('\n', stderr);
     exit(globalstatret);
 }

@@ -12,6 +12,7 @@ int builtin_exit (int argc, char ** argv){
         status = atoi(argv[1]);
     }
     
+    write_history_file();
     exit(status);
 
     return status;

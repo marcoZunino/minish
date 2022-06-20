@@ -25,12 +25,23 @@ struct builtin_struct {         // struct con información de los builtins
     char *help_txt;             // el texto de ayuda
 };
 
+struct history_entry {
+    char *command;
+    struct history_entry *next;
+};
+
+struct history_list {
+    struct history_entry *first;
+    int qty;
+};
 
 // Variables que deben definirse en el main como externas
 
 extern int globalstatret;       // guarda status del ultimo comando
 
 extern struct builtin_struct builtin_arr[];
+
+extern struct history_list * history_arr;
 
 /*
     builtin_arr es una lista de los builtins, que se recorrerá en forma lineal.
@@ -86,6 +97,9 @@ extern int builtin_unsetenv (int argc, char ** argv);
 extern int ejecutar (int argc, char ** argv);
 extern int externo (int argc, char ** argv);
 extern int linea2argv(char *linea, int argc, char **argv);
+
+extern void add_history_entry(char *cmd);
+extern void write_history_file();
 
 extern void prompt(char * ps);
 extern void sigint_handler(int signum);
