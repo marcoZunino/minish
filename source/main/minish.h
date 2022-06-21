@@ -27,11 +27,13 @@ struct builtin_struct {         // struct con información de los builtins
 
 struct history_entry {
     char *command;
+    struct history_entry *prev;
     struct history_entry *next;
 };
 
 struct history_list {
     struct history_entry *first;
+    struct history_entry *last;
     int qty;
 };
 

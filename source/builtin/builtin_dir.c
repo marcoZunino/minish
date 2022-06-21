@@ -8,7 +8,7 @@
 int get_files(char * dir_name, char ** file_list) {
     DIR * d = opendir(dir_name);
     if (d == NULL) {
-        return -1;
+        return 1;
     } else {
         struct dirent * dir;
         for (int i = 0; i < MAXWORDS && (dir = readdir(d)) != NULL; i++) {
@@ -65,7 +65,7 @@ int builtin_dir (int argc, char ** argv) {
 
         if (d == NULL) {
             //error no existe directorio
-            return -1;
+            return 1;
         }
         struct dirent * c;
         while ((c = readdir(d)) != NULL) {

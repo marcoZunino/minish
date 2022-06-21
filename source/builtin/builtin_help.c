@@ -14,7 +14,7 @@ int builtin_help (int argc, char ** argv) {
             printf("%s\n", b->help_txt);
         } else {
             printf("No se encontró comando %s\n", argv[1]);
-            status = -1;
+            status = 1;
         }
     }
 

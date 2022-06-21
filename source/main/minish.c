@@ -7,51 +7,110 @@
 #include <errno.h>
 #include "minish.h"
 
-void
-prompt(char *ps) {
+void prompt(char *ps) {
     // ps is the prompt string
     fprintf(stderr, "(%s) ^D to exit > ", ps);
 }
 
-void
-sigint_handler(int signum) {             // the handler for SIGINT
+void sigint_handler(int signum) {             // the handler for SIGINT
     fprintf(stderr, "Interrupt! (signal number %d)\n", signum);
 }
 
-void
-add_history_entry(char *cmd) {
+
+void add_history_entry(char *cmd) {
     if (cmd != NULL) {
         struct history_entry * new = (struct history_entry *) malloc(sizeof(struct history_entry));
         new->command = strdup(cmd);
         new->next = NULL;
 
-        struct history_entry * end = history_arr->first;
-        if (end != NULL) {
-            for (; end->next!=NULL; end = end->next);
-            end->next = new;
-        } else {
+        if (history_arr->qty == 0) {
             history_arr->first = new;
+            new->prev = NULL;
+            history_arr->last = new;
+        } else {
+            new->prev = history_arr->last;
+            history_arr->last->next = new;
+            history_arr->last = new;
         }
+
         history_arr->qty ++;
     }
 }
 
-void
-write_history_file() {
+void clean_list(struct history_list *list){
+    
+    struct history_entry *entry = list->first;
+    //list->first = NULL;
+    for (struct history_entry *nxt = entry->next; entry!=NULL; entry=nxt) {
+        nxt = entry->next;
+        entry->next = NULL;
+        entry->prev = NULL;
+        free(entry->command);
+        free(entry);
+
+    }
+    //list->last = NULL;
+
+}
+
+
+void write_history_file(int history_length) {
+    
     char path[MAXLINE];
     strncpy(path, getenv("HOME"), MAXLINE);
     strcat(path, "/");
     strcat(path, HISTORY_FILE);
     
     FILE *history = fopen(path, "a");
+    if (history == NULL) {
+        //ERROR
+        return;
+    }
+
     struct history_entry *entry = history_arr->first;
-    for (struct history_entry *next; entry != NULL; entry = next) {
-        next = entry->next;
-        fputs(entry->command, history);
-        free(entry);
+
+    struct history_entry *nxt = entry->next;
+    for (int p = 0; entry != NULL; entry = nxt, p++) {
+        nxt = entry->next;
+        if (p >= history_length) {
+            fputs(entry->command, history);
+        }
+    }
+    fclose(history);
+
+    clean_list(history_arr);
+}
+
+void load_history() {
+
+    char path[MAXLINE];
+    strncpy(path, getenv("HOME"), MAXLINE);
+    strcat(path, "/");
+    strcat(path, HISTORY_FILE);
+
+    FILE * history = fopen(path, "r");
+    if (history == NULL) {
+        //ERROR
+        return;
+    }
+
+    char line[MAXLINE] = {0};
+    int p = 0;
+    char c;
+    while ((c = fgetc(history)) != EOF) {
+        line[p] = c;
+        line[p+1] = '\0';
+        p++;
+
+        if (c == '\n') {
+            add_history_entry(line);
+            line[0] = '\0';
+            p = 0;
+        }
     }
     fclose(history);
 }
+
 
 struct builtin_struct builtin_arr[] = {
         {"exit", builtin_exit, HELP_EXIT},
@@ -70,12 +129,8 @@ struct builtin_struct builtin_arr[] = {
 };
 
 
-//struct history_list *history_arr = (struct history_list *) malloc(sizeof(struct history_list));
-struct history_list history_array = {NULL, 0};
+struct history_list history_array = {NULL, NULL, 0};
 struct history_list *history_arr = &history_array;
-// history_arr->first = NULL;
-// history_arr->qty = 0;
-
 
 int globalstatret = 0; // = valor por defecto
 
@@ -88,6 +143,9 @@ main () {
         error(0, errno, "./minish: variable de ambiente HOME no existe - se usará history en /usr/local/bin\n");
         exit(-1);
     }
+
+    load_history();
+    int history_length = history_arr->qty;
 
     char line[MAXLINE];
 
@@ -125,7 +183,7 @@ main () {
 
     }
 
-    write_history_file();
+    write_history_file(history_length);
     fputc('\n', stderr);
     exit(globalstatret);
 }

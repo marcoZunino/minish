@@ -8,8 +8,12 @@ int builtin_exit (int argc, char ** argv){
     
     if (argc == 1){                     // si hay un argumento solo 
         status = globalstatret;         // status es el del ultimo comando     
+    } else if (argc == 2) {
+        status = atoi(argv[1]);         // se castea el parametro a entero
+        //CHEQUEAR QUE SEA CORRECTO EL PARAMETRO (NUMERO ENTRE 0 Y 255)
     } else {
-        status = atoi(argv[1]);         // sino preguntar
+        //error de argumentos
+        return 1;
     }
     
     write_history_file();               // actualiza history
