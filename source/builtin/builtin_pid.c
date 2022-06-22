@@ -6,7 +6,7 @@
 int builtin_pid(int argc, char ** argv) {
        
     pid_t pid;
-    pid = getpid(); 
-    printf("Identificador del proceso: %d\n", pid);     // muestra el process id del shell
+    pid = getpid();                                     // obtiene el process id del shell
+    printf("Identificador del proceso: %d\n", pid); 
     return 0;                                           // siempre tiene exito
 }

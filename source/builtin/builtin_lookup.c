@@ -7,9 +7,10 @@ struct builtin_struct * builtin_lookup (char * cmd) {
 
     struct builtin_struct * b;
     for (b = builtin_arr; b->cmd != NULL; b++) {
-        if (strcmp(cmd, b->cmd) == 0) return b;
+        if (strcmp(cmd, b->cmd) == 0) {             // consulta si cmd es un builtin
+            return b;                               // retorna un puntero a esa estructura, sino retorna NULL
+        }         
     }
-
-    return NULL;
+    return NULL;                                  
 
 }

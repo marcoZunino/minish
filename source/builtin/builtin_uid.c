@@ -11,7 +11,7 @@ int builtin_uid (int argc, char ** argv) {
     struct passwd * p = getpwuid(userid);    // devolverá un puntero a una estructura passwd con la estructura 
                                              // definida en <pwd.h> con una entrada coincidente si se encuentra
 
-    if (p == NULL){                             // devolverá un puntero nulo si no se encuentra la entrada solicitada o si se produce un error
+    if (p == NULL){                          // devolverá un puntero nulo si no se encuentra la entrada solicitada o si se produce un error
         //printf("Ha ocurrido un error\n");
         return 1;
     }

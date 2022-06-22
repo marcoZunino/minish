@@ -20,27 +20,27 @@ int externo (int argc, char ** argv) {
     int status;
 
 
-    sigaction(SIGINT, NULL, &oldact); // the  previous action for SIGINT is saved in oldact
+    sigaction(SIGINT, NULL, &oldact);           // the  previous action for SIGINT is saved in oldact
     newact = oldact;
 
-    if ((pid = fork()) < 0) {       //fork error, i.e. too many processes
+    if ((pid = fork()) < 0) {                   // fork error, i.e. too many processes
         
         error(0, errno, "fork error\n");
 
-    } else if (pid == 0) { //child
+    } else if (pid == 0) {                      //child
         
         newact.sa_handler = SIG_DFL;
         sigaction(SIGINT, &newact, NULL);
 
-        execvp(argv[0], argv);   // if successful, child will go on with new executable
+        execvp(argv[0], argv);                  // if successful, child will go on with new executable
         error(EXIT_FAILURE, errno, "execvp error\n");   // if exec not successful, just exit child
 
-    } else { //parent (shell) process
+    } else {                                    //parent (shell) process
         newact.sa_handler = SIG_IGN;
-        sigaction(SIGINT, &newact, NULL);   // ignore SIGINT while waiting
+        sigaction(SIGINT, &newact, NULL);       // ignore SIGINT while waiting
         waitpid(pid, &status, 0);
         
-        sigaction(SIGINT, &oldact, NULL);   //restore SIGINT when child finishes
+        sigaction(SIGINT, &oldact, NULL);       // restore SIGINT when child finishes
 
     }
 
