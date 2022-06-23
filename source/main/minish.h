@@ -25,25 +25,28 @@ struct builtin_struct {         // struct con información de los builtins
     char *help_txt;             // el texto de ayuda
 };
 
+//nodos para la lista de comandos del history
 struct history_entry {
-    char *command;
-    struct history_entry *prev;
-    struct history_entry *next;
+    char *command;      //linea guardada
+    struct history_entry *prev; //nodo anterior
+    struct history_entry *next; //nodo siguiente
 };
 
+//lista doblemente enlazada para el history
 struct history_list {
-    struct history_entry *first;
-    struct history_entry *last;
-    int qty;
+    struct history_entry *first;    //primer nodo
+    struct history_entry *last;     //ultimo nodo
+    int qty;                        //cantidad de nodos
 };
 
 // Variables que deben definirse en el main como externas
 
 extern int globalstatret;       // guarda status del ultimo comando
 
-extern struct builtin_struct builtin_arr[];
+extern struct builtin_struct builtin_arr[]; //array con los comandos internos del minishell
 
-extern struct history_list * history_arr;
+extern struct history_list * history_arr;   //puntero a la lista del history
+extern int history_length; //cantidad de comandos guardados previamente en el archivo de history
 
 /*
     builtin_arr es una lista de los builtins, que se recorrerá en forma lineal.
@@ -83,7 +86,6 @@ extern struct history_list * history_arr;
 // Funciones a definir en los correspondientes archivos fuentes
 
 extern struct builtin_struct * builtin_lookup(char *cmd);
-
 extern int builtin_exit (int argc, char ** argv);
 extern int builtin_help (int argc, char ** argv);
 extern int builtin_history (int argc, char ** argv);
@@ -101,7 +103,9 @@ extern int externo (int argc, char ** argv);
 extern int linea2argv(char *linea, int argc, char **argv);
 
 extern void add_history_entry(char *cmd);
-extern void write_history_file();
+extern void write_history_file(int history_length);
+extern int load_history();
+extern void clean_list(struct history_list *list);
 
 extern void prompt(char * ps);
 extern void sigint_handler(int signum);

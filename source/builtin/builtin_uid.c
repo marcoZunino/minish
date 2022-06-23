@@ -3,6 +3,8 @@
 #include <pwd.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <errno.h>
+#include <error.h>
 #include "minish.h"
 
 int builtin_uid (int argc, char ** argv) {
@@ -12,7 +14,7 @@ int builtin_uid (int argc, char ** argv) {
                                              // definida en <pwd.h> con una entrada coincidente si se encuentra
 
     if (p == NULL){                          // devolverá un puntero nulo si no se encuentra la entrada solicitada o si se produce un error
-        //printf("Ha ocurrido un error\n");
+        error(0, errno, "error uid");
         return 1;
     }
 

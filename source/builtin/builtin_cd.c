@@ -24,7 +24,7 @@ int builtin_cd (int argc, char ** argv) {
         if (home != NULL) {
             status = chdir(home);         // cambia del directorio corriente al especificado en la ruta
         } else {
-            printf("error\n");            // significa que no esta definida la variable HOME
+            error(0, errno, "error cd: variable HOME does not exist");  //no esta definida la variable HOME
             return 1;
         }
         if (status == 0) {
@@ -37,7 +37,7 @@ int builtin_cd (int argc, char ** argv) {
             if (prev != NULL) {
                 status = chdir(prev);
             } else {
-                printf("error\n");        // no esta definida la variable OLDPWD
+                error(0, errno, "error cd: variable OLDPWD does not exist");    // no esta definida la variable OLDPWD
                 return 1;
             }
 
@@ -49,12 +49,12 @@ int builtin_cd (int argc, char ** argv) {
         }
 
         if (status == 0) {
-            update_env(oldpwd);
+            update_env(oldpwd);           //se actualizan variables de ambiente
         }
         return status;
 
     } else {
-        //error, pocos argumentos
+        error(0, errno, "error cd: too many arguments");
         return 1;
     }
 }
